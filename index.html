@@ -72,145 +72,6 @@
                 </a>
             </li>
 
-            <!-- Tools-->
-            <li class="nav-item dropdown keep-open">
-                <a class="nav-link" href="#" role="button" data-toggle="dropdown" >
-                    <span class="fa-stack fa-lg">
-                        <i class="fa fa-square fa-stack-2x buttonbg"></i>
-                        <i class="fa fa-wrench fa-stack-1x buttonfg"></i>
-                        <i class="fa fa-sort-down fa-stack-1x buttonfg downchevron"></i>
-                    </span>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    <!--use font awesome icons-->
-                    <a id="measheader" class="dropdown-item navbar-text" href="#"> <strong><span class="fa-stack fa-lg">
-                        <i class="fa fa-square fa-stack-2x buttonbg"></i>
-                        <i class="fa fa-wrench fa-stack-1x buttonfg"></i>
-                    </span>Measurements</strong> </a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item navbar-text" href="#" id="measPoint"> <i class="fa fa-bullseye fa-fw fa-lg"></i> Point </a>
-                    <a class="dropdown-item navbar-text" href="#" id="measDistance"> <i class="fa fa-arrows-h fa-fw fa-lg"></i> Distance </a>
-                    <a class="dropdown-item navbar-text" href="#" id="measHeight"> <i class="fa fa-arrows-v fa-fw fa-lg"></i> Height </a>
-                    <a class="dropdown-item navbar-text" href="#" id="measAngle"> <i class="fa fa-share-alt fa-fw fa-lg"></i> Angle </a>
-                    <a class="dropdown-item navbar-text" href="#" id="measLookAt"> <i id="lookatbtn" class="fa fa-crosshairs fa-fw fa-lg"></i> Look At </a>
-                    <a class="dropdown-item navbar-text" href="#" id="lookAtFilter"> &nbsp &nbsp <i id="filterbtn" class="fa fa-filter fa-fw fa-lg"></i> Filter Images </a>
-                    <a class="dropdown-item navbar-text" href="#" id="toggleLookAtPtVisible"> &nbsp &nbsp <i id="lookatvisible" class="fa fa-circle fa-fw fa-lg buttonfgclicked"></i> Visible Point </a>
-                    <a class="dropdown-item navbar-text" href="#" id="measClear"> <i class="fa fa-close fa-fw fa-lg"></i> Remove All</a>
-                </div>
-            </li>
-
-            <!-- Appearance-->
-            <li class="nav-item dropdown keep-open">
-                <a class="nav-link " href="#" role="button" data-toggle="dropdown" >
-                    <span class="fa-stack fa-lg">
-                        <i class="fa fa-square fa-stack-2x buttonbg"></i>
-                        <i class="fa fa-paint-brush fa-stack-1x buttonfg"></i>
-                        <i class="fa fa-sort-down fa-stack-1x buttonfg downchevron"></i>
-                    </span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-right" >
-                    <li id="appearanceheader"><a class="dropdown-item navbar-text" href="#"> <strong>
-                        <span class="fa-stack fa-lg">
-                        <i class="fa fa-square fa-stack-2x buttonbg"></i>
-                        <i class="fa fa-paint-brush fa-stack-1x buttonfg"></i>
-                        </span>
-                        Appearance</strong> </a></li>
-                    <li><div class="dropdown-divider"></div></li>
-                    <li><a id="btntogglelighting" class="dropdown-item navbar-text" href="#">
-                        <i id="btnlightbulb" class="fa fa-lightbulb-o fa-fw fa-lg "></i>
-                        Toggle Lighting </a>
-                    </li>
-
-                    <li><a id="btntoggleHQ" class="dropdown-item navbar-text" href="#">
-                        <i id="btnHQ" class="fa fa-star fa-fw fa-lg "></i>
-                        Toggle HQ Points</a>
-                    </li>
-
-
-                    <li><div class="dropdown-divider"></div></li>
-
-                    <li>
-                        <a class="dropdown-item navbar-text" href="#">
-                            <div class="input-group">
-                                <span class="input-group-addon navbar-text" style="width:140px">Number Of Points:</span>
-                                <input id="sliderPointBudgetValue" type="text" class="form-control" placeholder="1M">
-                            </div>
-                            <div id="sliderPointBudget"></div>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a class="dropdown-item navbar-text" href="#">
-                            <div class="input-group">
-                                <span class="input-group-addon navbar-text" style="width:140px">Point Size:</span>
-                                <input id="sliderPointSizeValue" type="text" class="form-control" placeholder="50">
-                            </div>
-                            <div id="sliderPointSize"></div>
-                        </a>
-                    </li>
-
-                    <li><div class="dropdown-divider"></div></li>
-
-                    <li class="dropdown-item navbar-text">
-                        <div class="input-group">
-                            <span class="input-group-addon navbar-text" style="width:140px">Color Blend:</span>
-                            <input id="colorblendValue" type="text" class="form-control" placeholder="0">
-                        </div>
-                        <div id="sliderColorBlend"></div>
-                        <div class="btn-group btn-group-justified" role="group" aria-label="Second group">
-                            <button id="btnRGB" type="button" class="btn btn-secondary" >RGB</button>
-                            <button id="btnBoth" type="button" class="btn btn-secondary" >Both</button>
-                            <button id="btnElev" type="button" class="btn btn-secondary" >Elev</button>
-                        </div>
-                    </li>
-
-                    <li><div class="dropdown-divider"></div></li>
-
-                    <li>
-                        <a class="dropdown-item navbar-text" href="#">
-                            Elevation Range: <br>
-                            <div id="slider-range"></div>
-                            <div class="input-group">
-                                <span class="input-group-addon navbar-text" style="width:140px">Min:</span>
-                                <input id="minval" type="text" class="form-control" name="email" placeholder="0">
-                            </div>
-                            <div class="input-group">
-                                <span class="input-group-addon navbar-text" style="width:140px">Max:</span>
-                                <input id="maxval" type="text" class="form-control" name="password" placeholder="10">
-                            </div>
-                        </a>
-                    </li>
-
-                    <li><div class="dropdown-divider"></div></li>
-
-                    <li>
-                        <a class="dropdown-item navbar-text" href="#">
-                            Colormap: <br>
-                            <div class="btn-group btn-group-justified" role="group" aria-label="Second group">
-                                <button id="btnColormap1" type="button" class="btn btn-secondary" >&nbsp</button>
-                                <button id="btnColormap2" type="button" class="btn btn-secondary" >&nbsp</button>
-                                <button id="btnColormap3" type="button" class="btn btn-secondary" >&nbsp</button>
-                                <button id="btnColormap4" type="button" class="btn btn-secondary" >&nbsp</button>
-                                <button id="btnColormap5" type="button" class="btn btn-secondary" >&nbsp</button>
-                                <button id="btnColormap6" type="button" class="btn btn-secondary" >&nbsp</button>
-                                <button id="btnColormap7" type="button" class="btn btn-secondary" >&nbsp</button>
-                            </div>
-                        </a>
-                    </li>
-
-                    <li>
-                        <a class="dropdown-item navbar-text" href="#">
-                            <div class="input-group">
-                                <span class="input-group-addon navbar-text" style="width:140px">Image Opacity:</span>
-                                <input id="sliderImageOpacityValue" type="text" class="form-control" placeholder="100%">
-                            </div>
-
-                            <div id="sliderImageOpacity"></div>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-
             <!-- Download-->
 
             <li class="nav-item dropdown keep-open">
@@ -469,7 +330,7 @@ document.title = "";
 
 <!-- Annotation Modal -->
 <div class="modal fade" id="annotationmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-dialog" role="document">
         <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -480,7 +341,7 @@ document.title = "";
                         <form>
                             <div class="form-group">
                                     <label>Titulo: </label> <input class="form-control" type="text" name="fname" id="annotationTitle"><br>
-                                    <label>Descripcion: </label> <textarea class="form-control" type="text" name="lname" id="annotationDescription"></textarea><br>
+                                    <label>Descripcion: </label> <textarea class="form-control" type="text" name="lname" id="annotationDescription" style="height: 300px;"></textarea><br>
                             </div>
                         </form>
                     </p>

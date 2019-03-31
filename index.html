@@ -12,10 +12,8 @@
     </script>
 
     <meta charset="utf-8">
-    <meta name="description" content="Potree and three.js based SfM data visualization">
-    <meta name="author" content="Richie Slocum">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Divi Carina Bay</title>
+    <title>Potree Viewer</title>
     <link rel="icon" href="img/logoOSU2.png">
     <link rel="stylesheet" type="text/css" href="libs/potree/potree.css">
     <link rel="stylesheet" type="text/css" href="libs/jquery-ui/jquery-ui.min.css">
@@ -51,7 +49,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/4.1.2/math.min.js"></script>
 
 <!-- Bootstrap Layout -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light py-0" style="z-index:100;">
+<nav class="navbar navbar-expand-lg navbar-light bg-light py-0" style="z-index:100; left: 100">
     <a class="navbar-brand" href="#">
         <!--<img src="img/logoOSU2.png"  height="50px" class="d-inline-block align-top">-->
     </a>
@@ -65,8 +63,8 @@
         <!--Create class ml-auto for the navbar items you want on the right.-->
 
             <!-- Annotation-->
-            <li class="nav-item dropdown keep-open">
-                <a class="nav-link" href="#" role="button" data-toggle="dropdown" >
+            <li class="nav-item dropdown keep-open" id="annotat">
+                    <a class="nav-link" href="#">
                     <span class="fa-stack fa-lg">
                         <i class="fa fa-square fa-stack-2x buttonbg"></i>
                         <i class="fa fa-commenting-o fa-stack-1x buttonfg"></i>
@@ -273,13 +271,39 @@
     </button>
 </nav>
 
+document.title = "";
+		viewer.setEDLEnabled(true);
+		viewer.setBackground("gradient"); // ["skybox", "gradient", "black", "white"];
+		viewer.setDescription(``);
 
-<div id="leafletmap"></div>
-</div>
-<div class="potree_container" style="position: absolute; width: 100%; height: 100%; left: 0px; top: 0px;" >
-    <div id="potree_render_area">
-    </div>
-</div>
+	<div class="potree_container" style="position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; ">
+		<div id="potree_render_area"></div>
+		<div id="potree_sidebar_container"> </div>
+	</div>
+
+	<script type="x-shader/x-fragment" id="fs_interpolation">
+
+    varying vec3 vColor;
+
+    #extension GL_EXT_frag_depth : enable
+
+    void main() {
+
+        // make circular
+        float a = pow(2.0*(gl_PointCoord.x - 0.5), 2.0);
+        float b = pow(2.0*(gl_PointCoord.y - 0.5), 2.0);
+        float c = 1.0 - (a + b);
+
+        if(c < 0.0){
+            discard;
+        }
+
+
+        gl_FragColor = vec4(vColor, 1.0);
+        gl_FragDepthEXT = gl_FragCoord.z + 0.01*(1.0-pow(c, 2.0));
+    }
+
+</script>
 
 <!-- Info Modal -->
 <div class="modal fade" id="infomodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -443,10 +467,35 @@
     </div>
 </div>
 
+<!-- Annotation Modal -->
+<div class="modal fade" id="annotationmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <h5 class="modal-title">Annotation</h5>
+                    </div>
+                    <div class="modal-body">
+                    <p>
+                        <form>
+                            <div class="form-group">
+                                    <label>Titulo: </label> <input class="form-control" type="text" name="fname" id="annotationTitle"><br>
+                                    <label>Descripcion: </label> <textarea class="form-control" type="text" name="lname" id="annotationDescription"></textarea><br>
+                            </div>
+                        </form>
+                    </p>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="hideAnnotationModal">Close</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="annotationFormSubmit" type="submit">Save changes</button>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
 
 <script src="js/loadpointcloud.js"></script>
-<script src="js/addCameras.js"></script>
-<!-- <script src="js/addLeafletMap.js"></script> -->
 
 <script>
     var cmap=Potree.Gradients["RAINBOW"];
@@ -524,6 +573,109 @@
             camsvisible = true;
             $('#cameraicon').addClass('buttonfgclicked');
         }
+    });
+
+    var annotat = $("annotat");
+    
+    $('#annotat').on('click', function(e) 
+    {
+        let measuringTool = new Potree.MeasuringTool(viewer);
+
+        let dummyMeasure = measuringTool.startInsertion
+        ({
+                showDistances: false,
+                showAngles: false,
+                showCoordinates: true,
+                showArea: false,
+                closed: true,
+                maxMarkers: 1,
+                name: 'Point'
+        });
+
+        const stopDragging = e => {
+                if (e.key === "Escape") {
+                    window.viewer.inputHandler.drag = null;
+                    dummyMeasure.removeMarker(dummyMeasure.points.length - 1);
+                    window.viewer.scene.removeMeasurement(dummyMeasure);
+                    document.removeEventListener('keyup', stopDragging);
+                }
+            }
+
+            document.addEventListener('keyup', stopDragging);
+
+            dummyMeasure.addEventListener('marker_dropped', (markerDroppedEvent) => {
+                document.removeEventListener('keyup', stopDragging);
+
+                const annotationFormButton = document.getElementById('annotationFormSubmit');
+                const annotationTitle = document.getElementById('annotationTitle');
+                const annotationDescription = document.getElementById('annotationDescription');
+                const hideAnnotationModal = document.getElementById('hideAnnotationModal');
+                const annotationForm = $("#annotationmodal");
+
+                annotationForm.modal();
+
+                const stopInsertion = e => {
+                    if (e.key === "Escape" || e.type === 'click') {
+                        window.viewer.scene.removeMeasurement(dummyMeasure);
+                        annotationForm.modal();
+                        document.removeEventListener('keyup', stopInsertion);
+                        hideAnnotationModal.removeEventListener('click', stopInsertion);
+                    }
+                }
+                
+                hideAnnotationModal.addEventListener('click', stopInsertion);
+                document.addEventListener('keyup', stopInsertion)
+                
+                function handleFormSubmit () {
+                    if (!annotationTitle.value) {
+                        window.viewer.scene.removeMeasurement(dummyMeasure);
+                        return;
+                    }
+                
+                    window.viewer.scene.addAnnotation(
+                        markerDroppedEvent.measurement.points[0].position, 
+                        {
+                            title: annotationTitle.value,
+                            description: annotationDescription.value || null,
+                            cameraPosition: [window.viewer.scene.view.position.x, window.viewer.scene.view.position.y, window.viewer.scene.view.position.z],
+                            cameraTarget: [window.viewer.scene.view.getPivot().x, window.viewer.scene.view.getPivot().y, window.viewer.scene.view.getPivot().z]
+                        }    
+                    );
+
+                    window.viewer.scene.removeMeasurement(dummyMeasure);
+
+                    let annotationInfo = {
+                        type: '3dannotation',
+                        title: annotationTitle.value,
+                        data: JSON.stringify({
+                            position: [markerDroppedEvent.measurement.points[0].position.x, markerDroppedEvent.measurement.points[0].position.y, markerDroppedEvent.measurement.points[0].position.z],
+                            title: annotationTitle.value,
+                            description: annotationDescription.value || null,
+                            cameraPosition: [window.viewer.scene.view.position.x, window.viewer.scene.view.position.y, window.viewer.scene.view.position.z],
+                            cameraTarget: [window.viewer.scene.view.getPivot().x, window.viewer.scene.view.getPivot().y, window.viewer.scene.view.getPivot().z]
+                        })
+                    };
+
+                    fetch(annotationInfo)
+                    .then(annotationResponse => {
+                        if (!annotationResponse.status) {
+                            return Promise.reject(annotationResponse.content);
+                        }
+                        const annotationCount = window.viewer.scene.annotations.children.length;
+                        window.viewer.scene.annotations.children[annotationCount - 1].id = annotationResponse.content;
+                    })
+                    .catch(reason => {
+                        // error
+                    });
+
+                    window.viewer.scene.removeMeasurement(dummyMeasure)
+                    annotationFormButton.removeEventListener('click', handleFormSubmit);
+                    annotationForm.modal();
+                    document.removeEventListener('keyup', stopInsertion);
+                };
+
+                annotationFormButton.addEventListener('click', handleFormSubmit);
+            });
     });
 
     $('#imgleft').on('click', function (e) {

@@ -3,9 +3,10 @@ window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"))
 viewer.setEDLEnabled(true);
 viewer.setFOV(60);
 viewer.setPointBudget(1*1000*1000);
-viewer.setEDLEnabled(false);
 viewer.setBackground("gradient"); // ["skybox", "gradient", "black", "white"];
 viewer.loadSettingsFromURL();
+viewer.setEDLEnabled(true);
+viewer.setDescription("Adding a custom section to the sidebar");
 
 Potree.loadPointCloud("assets/BSP-P-001/cloud.js", "pointcloud", e => {
     let pointcloud = e.pointcloud;
@@ -16,6 +17,15 @@ Potree.loadPointCloud("assets/BSP-P-001/cloud.js", "pointcloud", e => {
     material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
     material.shape = Potree.PointShape.SQUARE;
     viewer.fitToScreen();
+
+    viewer.loadGUI(() => {
+        viewer.toggleSidebar();
+        viewer.setLanguage('en');
+        //$("#menu_appearance").next().show();
+        $("#menu_tools").next().show();
+        //$("#menu_scene").next().show();			
+        //viewer.toggleSidebar();
+    });
 });
 
 var XYZPTstart = getCameraXYZPT();

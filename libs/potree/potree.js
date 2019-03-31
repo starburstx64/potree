@@ -8733,6 +8733,9 @@ Potree.Annotation = class extends THREE.EventDispatcher {
 					<span class="annotation-description-close">
 						<img src="${iconClose}" width="16px">
 					</span>
+					<span class="fa fa-pencil-square-o" id="edit">
+						<img src="${iconClose}" width="16px">
+					</span>
 					<span class="annotation-description-content">${this._description}</span>
 				</div>
 			</div>
@@ -8743,7 +8746,7 @@ Potree.Annotation = class extends THREE.EventDispatcher {
 		this.elTitle.append(this._title);
 		this.elDescription = this.domElement.find('.annotation-description');
 		this.elDescriptionClose = this.elDescription.find('.annotation-description-close');
-		// this.elDescriptionContent = this.elDescription.find(".annotation-description-content");
+		this.elDescriptionEdit = this.elDescription.find('#edit');
 
 		this.clickTitle = () => {
 			if(this.hasView()){
@@ -8779,8 +8782,14 @@ Potree.Annotation = class extends THREE.EventDispatcher {
 			e => this.elDescriptionClose.css('opacity', '1'),
 			e => this.elDescriptionClose.css('opacity', '0.5')
 		);
+
+		this.elDescriptionEdit.hover(
+			e => this.elDescriptionEdit.css('opacity', '1'),
+			e => this.elDescriptionEdit.css('opacity', '0.5')
+		); 
+
 		this.elDescriptionClose.click(e => this.setHighlighted(false));
-		// this.elDescriptionContent.html(this._description);
+		this.elDescriptionEdit.click(e => this.setHighlighted(false));
 
 		this.domElement.mouseenter(e => this.setHighlighted(true));
 		this.domElement.mouseleave(e => this.setHighlighted(false));
@@ -19351,7 +19360,7 @@ Potree.Viewer = class PotreeViewer extends THREE.EventDispatcher{
 			imgMenuToggle.src = new URL(Potree.resourcePath + '/icons/menu_button.svg').href;
 			imgMenuToggle.onclick = this.toggleSidebar;
 			imgMenuToggle.classList.add('potree_menu_toggle');
-			imgMenuToggle.style.top = '100px';
+			imgMenuToggle.style.top = '60px';
 
 			let imgMapToggle = document.createElement('img');
 			imgMapToggle.src = new URL(Potree.resourcePath + '/icons/map_icon.png').href;

@@ -25,6 +25,28 @@
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css"/>
+
+    <!-- Firebase App is always required and must be first -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-app.js"></script>
+
+    <!-- Add additional services that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.4/firebase-database.js"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/5.9.2/firebase.js"></script>
+    <script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyAhsImIN2d0kbWXfKUfhTvESZfFFOkGOfs",
+        authDomain: "hackaton2019-91a4a.firebaseapp.com",
+        databaseURL: "https://hackaton2019-91a4a.firebaseio.com",
+        projectId: "hackaton2019-91a4a",
+        storageBucket: "hackaton2019-91a4a.appspot.com",
+        messagingSenderId: "439921834701"
+    };
+    firebase.initializeApp(config);
+
+    </script>
 </head>
 
 <body>
@@ -368,7 +390,7 @@
                         window.viewer.scene.removeMeasurement(dummyMeasure);
                         return;
                     }
-                
+                    
                     window.viewer.scene.addAnnotation(
                         markerDroppedEvent.measurement.points[0].position, 
                         {
@@ -379,6 +401,18 @@
                         }    
                     );
 
+                    var anotacionesRef = db.collection("anotaciones");
+
+                    anotacionesRef.set({
+                    title: annotationTitle.value,
+                    description: annotationDescription.value || null,
+                    cameraPositionX: window.viewer.scene.view.position.x,
+                    cameraPositionY: window.viewer.scene.view.position.y,
+                    cameraPositionZ: window.viewer.scene.view.position.z,
+                    cameraTargetX: window.viewer.scene.view.getPivot().x,
+                    cameraTargetY: window.viewer.scene.view.getPivot().y,
+                    cameraTargetZ: window.viewer.scene.view.getPivot().z });
+                    
                     window.viewer.scene.removeMeasurement(dummyMeasure);
 
                     let annotationInfo = {

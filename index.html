@@ -334,7 +334,8 @@
             $('#cameraicon').removeClass('buttonfgclicked');
         }
         else {
-            if (cameraplaneview) {
+            if (cameraplaneview) 
+            {
                 imageplane.visible = true;
             }
             else {
@@ -412,7 +413,7 @@
                         }    
                     );
 
-                    var anotacionesRef = db.collection("anotaciones");
+                    /* var anotacionesRef = db.collection("anotaciones");
 
                     anotacionesRef.set({
                     title: annotationTitle.value,
@@ -422,7 +423,7 @@
                     cameraPositionZ: window.viewer.scene.view.position.z,
                     cameraTargetX: window.viewer.scene.view.getPivot().x,
                     cameraTargetY: window.viewer.scene.view.getPivot().y,
-                    cameraTargetZ: window.viewer.scene.view.getPivot().z });
+                    cameraTargetZ: window.viewer.scene.view.getPivot().z }); */
                     
                     window.viewer.scene.removeMeasurement(dummyMeasure);
 
